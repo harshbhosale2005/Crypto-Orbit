@@ -13,7 +13,7 @@ export default function Register() {
             await axios.post('http://localhost:5000/register', { email, password });
             alert('Registered! Please Login.');
             navigate('/login');
-        } catch { alert('Error Registering'); }
+        } catch { alert('Error Registering or user already exists '); }
     };
 
     return (

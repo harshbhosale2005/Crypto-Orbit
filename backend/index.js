@@ -70,16 +70,18 @@ app.post('/login', async (req, res) => {
 
 app.get('/coins', async (req, res) => {
     try {
-        //  Capture the page number from the frontend 
+        // 1. Capture BOTH currency and page from the frontend
+        // Default to 'usd' and page '1' if they are missing
+        const currency = req.query.currency || 'usd'; 
         const page = req.query.page || 1;
-        const limit = 10; // Number of coins per page
+        const limit = 10; 
 
-        //  Pass these params to CoinGecko
-      
+        // 2. Pass the dynamic 'currency' into the CoinGecko URL (vs_currency=${currency})
         const response = await axios.get(
-            `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=${limit}&page=${page}&sparkline=false`
+            `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currency}&order=market_cap_desc&per_page=${limit}&page=${page}&sparkline=false`
         );
         
+        // 3. Send the converted data back to React
         res.json(response.data);
     } catch (error) {
         console.error("Error fetching coins:", error.message);
